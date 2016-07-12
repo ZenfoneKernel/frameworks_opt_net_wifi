@@ -182,10 +182,6 @@ class WifiApConfigStore extends StateMachine {
             if (authType != KeyMgmt.NONE) {
                 config.preSharedKey = in.readUTF();
             }
-            // read in wifiApInactivityTimeout if bytes are available from in
-            if (in.available() != 0) {
-                config.wifiApInactivityTimeout = in.readLong();
-            }
 
             mWifiApConfig = config;
         } catch (IOException ignore) {
@@ -218,7 +214,6 @@ class WifiApConfigStore extends StateMachine {
             if(authType != KeyMgmt.NONE) {
                 out.writeUTF(config.preSharedKey);
             }
-            out.writeLong(config.wifiApInactivityTimeout);
         } catch (IOException e) {
             Log.e(TAG, "Error writing hotspot configuration" + e);
         } finally {
@@ -258,7 +253,6 @@ class WifiApConfigStore extends StateMachine {
             config.preSharedKey = randomUUID.substring(0, 8)
                     + randomUUID.substring(9, 13);
         }
-        config.wifiApInactivityTimeout = 0;
 
         sendMessage(WifiStateMachine.CMD_SET_AP_CONFIG, config);
     }
